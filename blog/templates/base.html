@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n %}
+<html>
+	<head>
+		<title>{% block title %}{% endblock%} | {{ BLOG_TITLE }}</title>
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/style/style.css" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+                <link rel="alternate" type="application/rss+xml" href="/djblogkit/feed/rss/" />
+{% block custom_js %}
+{% endblock %}
+	</head>
+	<body>
+		<ul id="nav">
+			<li><a href="#top">Top of Page</a></li>
+			<li><a href="#">Home</a></li>
+			<li><a href="#">Weblog</a></li>
+			<li><a href="#">Downloads</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+		<div id="main">
+			<a name="top" class="nodisplay"></a>a
+			<div id="hero"> </div>
+			<div id="header">
+				<div class="gear"> </div>
+				<h1 class="shad"><em>{{ BLOG_TITLE }}</em></h1>
+				<h1><em>{{ BLOG_TITLE }}</em></h1>
+			</div>
+
+			<div id="body">
+				<div id="sidebar">
+                {% for entry in entry_list %}
+                {% if forloop.first %}
+				<h3>{% trans 'Recent Entries' %}</h3>
+					<ul>
+                {% endif %}
+						<li><a href="{{ entry.absolute_url}}">{{ entry.title }}</a></li>
+				{% if forloop.last %}
+					</ul>
+				{% endif %}
+				{% endfor %}
+
+                {% for comment in comment_list %}
+                {% if forloop.first %}
+				<h3>{% trans 'Recent Comments' %}</h3>
+					<ul>
+                {% endif %}
+						<li><a href="{{ comment.entry.absolute_url}}#comment">{{ comment.author }}</a></li>
+				{% if forloop.last %}
+					</ul>
+				{% endif %}
+				{% endfor %}
+
+                {% for trackback in trackback_list %}
+                {% if forloop.first %}
+				<h3>{% trans 'Recent Trackbacks' %}</h3>
+					<ul>
+                {% endif %}
+						<li><a href="{{ trackback.entry.absolute_url}}#trackback">{{ trackback.blog_name }}</a></li>
+				{% if forloop.last %}
+					</ul>
+				{% endif %}
+				{% endfor %}
+
+                {% for archive in archive_list %}
+                {% if forloop.first %}
+				<h3>{% trans 'Archives' %}</h3>
+					<ul>
+                {% endif %}
+						<li><a href="{{ archive.absolute_url }}">{{ archive.year }}{{ archive.month}}</a></li>
+				{% if forloop.last %}
+					</ul>
+				{% endif %}
+				{% endfor %}
+
+                {% for tag in tag_list %}
+                {% if forloop.first %}
+				<h3>{% trans 'Tags' %}</h3>
+					<ul>
+                {% endif %}
+						<li><a href="{{ tag.absolute_url }}">{{ tag.name }}</a></li>
+				{% if forloop.last %}
+					</ul>
+				{% endif %}
+				{% endfor %}
+					<div style="clear: both;"> </div>
+					<p style="margin-top: 20px"><a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25_grey.gif" border="0" alt="Made with Django." title="Made with Django." /></a></p>
+				</div>
+				<div id="content">
+					{% if is_paginated %}
+					<div id="paging">
+						{% if has_previous %}<a href="?page={{ previous }}">&lt;{% trans 'Prev' %}</a>{% endif %}
+						{% if has_next %}<a href="?page={{ next }}">{% trans 'Next' %} &gt;</a>{% endif %}
+					</div>
+					{% endif %}
+{% block content %}
+					<h2>Yet Another Fixed Layout</h2>
+					<div class="meta">
+						<span class="date">February 22, 3006</span>
+						<span class="postedBy">Posted by <a href="#">Phillip J. Fry</a></span>
+					</div>
+					<p>
+						Here's another centered, fixed layout.  All my designs seem to be variations on this kind of structure; I 
+						<a class="flickr-pullout right" href="#">
+							<img src="http://images.google.com/images?q=tbn:jmuZz1c1ton1GM:http://home.earthlink.net/~mountfuturama/smFryWallpaper1.jpg" alt="" />
+						</a>
+						promise I'll do something different next time.  This one has a floaty nav bar on top for quick access to
+						links, as well as the top of the page.  I can see some people being annoyed by this, so fortunately it's 
+						easy to change so that it doesn't stay on top of the window.  Just change the <code><span class="csskeyword">position</span>: <span class="cssvalue">fixed</span></code> to <code><span class="csskeyword">position</span>: <span class="cssvalue">absolute</span></code> and ditch the IE hack 
+						(or you could change it to auto margins instead, if you want the header image to flow beneath it).  One 
+						thing that I included in this layout is a couple handy classes for your Flickr images.  See the example 
+						pullouts in the text as well as the thumbnails in the sidebar.  In the interest of filling up space, I may 
+						as well tell you that the sidebar has been done in kind of a funny way to make it vertically stretch over 
+						the entire content div.  This is impossible to do in a traditional way (including using 100% height in 
+						CSS, which isn't defined the way it should be). Check it out; I thought I was pretty clever to think of 
+						it!  You could use the sidebar for annotations, footnotes, links, photos, or whatever you like.
+					</p>
+					<p>
+						Now I'll steal some text from Wikipedia<small class="super">1</small>! Futurama is an American animated television series created by 
+						Matt Groening (creator of The Simpsons) and David X. Cohen (also a writer for The Simpsons). Set in "New 
+						New York City" in the 31st century, it was introduced on the Fox Network and received airplay between 
+						March 28, 1999 and August 10, 2003. It is currently in syndication on the Adult Swim segment of Cartoon 
+						Network in the United States, on Teletoon in Canada, on Channel 4, Sky One and Sky Two in the UK, and on 
+						Fox8 and Network Ten in Australia.
+					</p>
+					<div class="comments">
+						No comments | <a href="#">Leave a comment</a>
+					</div>
+
+					<h2>Good News, Everyone!</h2>
+					<div class="meta">
+						<span class="date">February 22, 3006</span>
+						<span class="postedBy">Posted by <a href="#">Hubert Farnsworth</a></span>
+					</div>
+					<p>
+					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum accumsan, justo non tristique laoreet, 
+					odio nisi fringilla nibh, vitae blandit eros sapien ac mi. Etiam non nisl euismod massa fringilla sagittis.
+					<a class="flickr-pullout right" href="#"><img src="http://images.google.com/images?q=tbn:Mb4nSTF51ebxaM:http://www.mathsci.appstate.edu/~sjg/futurama/stringtheory.jpg" alt="Good news, everyone!" /></a>
+					Nunc vestibulum iaculis purus. Vivamus arcu urna, tristique eu, pharetra et, ullamcorper porta, nibh. Nulla 
+					eget dolor sit amet purus aliquam lacinia. Cras eu quam. In id nisl et orci laoreet vulputate. Phasellus quis 
+					est vel libero euismod mollis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere 
+					cubilia Curae; Cras magna ante, sodales eget, commodo ac, molestie ut, velit. Cras quis pede sit amet massa 
+					feugiat imperdiet. Nulla dignissim. Curabitur eleifend, lorem quis dictum varius, elit nunc commodo enim, 
+					iaculis mattis dui felis et urna.
+					</p>
+
+					<p>
+					Aliquam erat volutpat. Maecenas ut mi ut odio gravida tincidunt. Proin urna urna, dapibus sit amet, eleifend 
+					quis, bibendum et, felis. Ut aliquet. Etiam diam erat, interdum ac, vehicula in, vulputate et, libero. Donec 
+					ut dolor quis leo blandit lobortis. Vestibulum sed tellus. Donec vitae lectus. Lorem ipsum dolor sit amet, 
+					consectetuer adipiscing elit. Nullam mollis aliquam nulla. Mauris pulvinar metus quis urna. Praesent eu turpis 
+					aliquam est mollis aliquam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia 
+					Curae; Vestibulum tempor nibh. Nam quis neque. 
+					</p>
+					<div class="comments">
+						<a href="#">8 comments</a> | <a href="#">Leave a comment</a>
+					</div>
+
+					<h2>Surrender Your Mysteries to Zoidberg!</h2>
+					<p>
+						Quisque convallis tellus<small class="super">2</small>. Etiam aliquam lobortis erat. Donec gravida tortor a massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cum sociis natoque penatibus et 
+						<a href="#" class="flickr-pullout right">
+							<img src="http://images.google.com/images?q=tbn:nHvOr_XTjxErFM:http://www.nyder.com/cthulhu/graphics/zoidberg.jpg" alt="" />
+						</a>
+						magnis dis parturient montes, nascetur ridiculus mus. Aliquam arcu libero, congue in, iaculis sit amet, dapibus non, ligula. Aliquam erat volutpat. Fusce nisl ante, pretium ac, suscipit sed, feugiat a, sem. Donec sollicitudin leo eu nisl. Donec at dui a urna rhoncus viverra. Curabitur arcu. Quisque vulputate, purus ac ultricies consectetuer, justo neque suscipit nisi, eget tempor nulla nisl vitae tellus. Aenean eget erat. Vestibulum imperdiet viverra metus.
+					</p>
+
+					<p>
+						Nunc adipiscing hendrerit pede. Vestibulum tempor bibendum libero. Duis consectetuer felis laoreet nibh. Pellentesque lacus libero, sagittis ornare, tempor et, porta in, elit. Donec eu leo. Etiam erat. Sed aliquam odio quis risus. Aliquam arcu. Aenean elementum. Curabitur pellentesque ligula ac risus. Morbi sodales vehicula ipsum. 
+					</p>
+					<div class="comments">
+						No comments | <a href="#">Leave a comment</a>
+					</div>
+{% endblock %}
+				</div>
+			</div>
+			<div id="footer">
+				Copyright &copy; 2006, {{ BLOG_TITLE }}.
+			</div>
+		</div>
+
+	</body>
+</html>

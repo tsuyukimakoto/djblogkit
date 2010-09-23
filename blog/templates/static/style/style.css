@@ -1,0 +1,36 @@
+@import url('industry.css');
+
+h3 { border-bottom: 1px dashed rgb(80,80,80); background-color: rgb(240,240,240);}
+.comment_row1, .comment_row2 { padding-left: .5em; }
+.comment_row1 { border-left: 2px solid rgb(190, 170, 140); }
+.url { text-align: right ; padding-top: 2px; color: rgb(150,150,150); }
+
+.form_label { float:left; width: 120px; min-width: 120px; }
+.form_input { float:left; width: 270px; min-width: 270px; }
+.form_input input { width: 270px; min-width: 270px; }
+.dummy { clear:both; height: 0px;}
+#comment_form .form_button { float: right; margin-right: 2em; }
+.error { color: rgb(255, 80, 80); }
+
+#related_contents_controller { margin-top: 1em; color: rgb(240,240,255); background-color: rgb(80,80,80);}
+#related_contents_header { font-weight: bold; font-size: 24px; }
+#related_contents_header img { margin: 3px 3px 2px 5px; }
+#related_contents_form { display: none; }
+.related_search_result { clear:both; padding: .5em; border-top: 1px solid rgb(240,240,250);  vertical-align: middle; }
+.related_current_result { padding: .5em; border-top: 1px solid rgb(240,250,250); }
+
+.related_action { float:left; }
+.related_title  { float:left; }
+.dummy { clear:both; height: 0px; }
+
+a img { border: none;}
+
+.add_icon, .del_icon, .search_icon {min-height: 48px; height: 48px; width:48px; border: none; background-repeat: no-repeat;}
+.add_icon { background-image: url(../images/48-love.png); }
+.del_icon { background-image: url(../images/48-fire.png); }
+.search_icon { background-image: url(../images/24-zoom.png); }
+/**
+#related_contents_result, #current_related_contents { height: 0px; }
+*/
+
+.related_object_image { float: left; border: 1px solid rgb(100, 100, 100); padding: 3px; font-weight: bold; text-align: center; }

@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load related_tags %}
+
+{% block custom_js %}
+  {% if user.is_staff %}
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/MochiKit.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Base.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Async.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Format.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/DOM.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Style.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Signal.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Iter.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Color.js"></script>
+<script type="text/javascript" src="http://static.everes.net/media/js/MochiKit/Visual.js"></script>
+<script language="JavaScript">
+<!--
+  var content_type_id = {{ blog_entry }};
+  var object_id = {{ object.id }};
+  var search_url = "/djblogkit/related/search/{{ blog_entry }}/{{ object.id }}/";
+  var current_url = "/djblogkit/related/current/{{ blog_entry }}/{{ object.id }}/";
+  var add_related_url = '/djblogkit/related/add/{{ blog_entry }}/{{ object.id }}/';
+  var remove_related_url = '/djblogkit/related/remove/{{ blog_entry }}/{{ object.id }}/';
+  var handle_search_result = function (result) {
+	test = "";
+    data = result.data;
+    if(data.length > 0) {
+        for(i=0;i < data.length;i++) {
+            test += data[i];
+        }
+        test += "<div class='dummy' />";
+    }
+    $('related_contents_result').innerHTML = test;
+  }
+  function show_search_form() {
+	set_current("");
+    t = $('related_contents_form');
+    appear(t);
+  }
+  function search() {
+	$('current_related_contents').innerHTML = "";
+    target_content_type_id = $('relatable_id').options[$('relatable_id').selectedIndex].value;
+    keywords_value = strip($('keywords').value, " ");
+    url = search_url + target_content_type_id + "/?keywords=" + keywords_value;
+    query = {};
+    d = loadJSONDoc(url, query);
+    d.addCallbacks(handle_search_result);
+  }
+  var handle_add_result = function (result){
+	if (result.result == false) {
+        alert(result.message);
+	} else {
+        t = $('related_search_result_' + result.target_content_type_id + '_' + result.target_object_id);
+        puff(t);
+	}
+  }
+  var handle_current_result = function (result){
+    if (result.result == false) {
+	  alert(result.message);
+    } else {
+      tmp = "";
+      data = result.data;
+	  for(i=0;i < data.length;i++) {
+	    tmp += data[i];
+      }
+      set_current(tmp);
+    }
+  }
+  function set_current(html) {
+	$('current_related_contents').innerHTML = html;
+  }
+  function get_current() {
+    fade('related_contents_form');
+	$('related_contents_result').innerHTML = "";
+    d = loadJSONDoc(current_url);
+    d.addCallbacks(handle_current_result);	
+  }
+  var handle_remove_result = function (result){
+	if (result.result == false) {
+      alert(result.message);
+	} else {
+      t = $('related_current_result_' + result.target_content_type_id + '_' + result.target_object_id);
+      dropOut(t);
+	}
+  }
+  function set_related(target_content_type_id, target_object_id) {
+    query = {};
+    url = add_related_url + "?target_content_type_id=" + target_content_type_id + "&target_object_id=" + target_object_id;
+    d = loadJSONDoc(url, query);
+    d.addCallbacks(handle_add_result);
+  }
+  function remove_related(target_content_type_id, target_object_id) {
+    query = {};
+    url = remove_related_url + "?target_content_type_id=" + target_content_type_id + "&target_object_id=" + target_object_id;
+    d = loadJSONDoc(url, query);
+    d.addCallbacks(handle_remove_result);
+  }
+-->
+</script>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% get_related_objects with object of blog_entry as related_objects %}
+    {% include 'blog/rdf.html' %}
+					<h2>{{ object.title }}</h2>
+					<div class="meta">
+						<span class="date">{{ object.create_date|date:"F d, Y  H:i"}}</span>
+						<span class="postedBy">Posted by <a href="#">{{ object.author }}</a></span>
+					</div>
+					<p>
+						{% if related_objects %}
+						{% for r in related_objects %}
+						  {% if r.inline %}
+						    {{ r.render_related }}
+						  {% endif %}
+						{% endfor  %}
+						{% endif %}
+						<div class="dummy"></div>
+						{{ object.body }}
+					</p>
+					{% if related_objects %}
+					{% for r in related_objects %}
+					  {% if not r.inline %}
+					    <div class="url">{% trans 'related item' %}-{{ forloop.counter }}: <a href="{{ r.get_absolute_url }}">{{ r }}</a></div>
+					  {% endif %}
+					{% endfor  %}
+					{% endif %}
+					<div class="url">perm link: <a href="{{ object.absolute_url }}">{{ object.absolute_url }}</a></div>
+					<div class="url">trackback: {{ object.absolute_url }}/tbping/</div>
+					<div class="additional">
+						{% for comment in object.comment_array %}
+						{% if forloop.first %}<h3>{% trans 'Comments' %}</h3>{% endif %}
+						<div class="{% cycle comment_row1,comment_row2 %}">
+							<div class="meta">
+								<span class="date">{{ comment.create_date|date:"F d, Y  H:i"}}</span>
+								<span class="postedBy">by {% if comment.url %}<a href="{{ comment.url }}">{% endif %}{{ comment.author }}{% if comment.url %}</a>{% endif %}</span>
+							</div>
+							<p>{{ comment.body|escape|linebreaks }}</p>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="additional">
+						{% for trackback in object.trackback_array %}
+						{% if forloop.first %}<h3>{% trans 'Trackbacks' %}</h3>{% endif %}
+						<div class="{% cycle comment_row1,comment_row2 %}">
+							<div class="meta">
+								<span class="date">{{ comment.create_date|date:"F d, Y  H:i"}}</span>
+								<span class="postedBy">by <a href="{{ trackback.url }}">{{ trackback.blog_name }}</a></span>
+							</div>
+
+							<p>{{ comment.excerpt|escape|linebreaks }}</p>
+						</div>
+						{% endfor %}
+					</div>
+  {% if user.is_staff %}
+{% load related_tags %}
+<div id="related_contents_controller">
+    <div id="related_contents_header">
+	  <img src="/djblogkit/static/images/24-search.png" onClick="show_search_form();" alt="{% trans 'Joint new' %}" /> 
+	  <img src="/djblogkit/static/images/24-current.png" onClick="get_current();" alt="{% trans 'Remove current' %}" />
+	</div>
+	<div id="related_contents_form">
+        {% get_relatable_list as relatable_list %}
+        <select id="relatable_id" class="related_contents_input">
+            {% for relatable in relatable_list %}<option value="{{ relatable.content_type.id }}">{{ relatable.content_type.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" class="related_contents_input" id="keywords" value="" />
+        <input type="button" value="{% trans 'Search' %}" onClick="search();" />
+	</div>
+	<div id="related_contents_result">
+	</div>
+    <div id="current_related_contents">
+	</div>
+</div>
+  {% endif %}
+  {% block comment_form %}
+					<div id="comment_form">
+						<form action="./add_comment/"　method="POST">
+							<fieldset>
+								<legend>{% trans 'add comment' %}</legend><br />
+								<div class="form_label"><label for="id_author">{% trans 'Commentator' %}</label></div>
+								<div class="form_input"><input type="text" id="id_author" name="author" /></div>
+								<div class="dummy">&nbsp;</div>
+								<div class="form_label"><label for="id_url">{% trans 'URL' %}</label></div>
+								<div class="form_input"><input type="text" id="id_url" name="url" /></div>
+								<div class="dummy">&nbsp;</div>
+								<div class="form_label"><label for="id_body">{% trans 'body' %}</label></div>
+								<div class="form_input"><textarea id="id_body" name="body" cols="35" rows="5"></textarea></div>
+								<div class="dummy">&nbsp;</div>
+								{% if object.riddle %}
+								<h4>{{ object.riddle }}</h4>
+								<div class="form_label"><label for="id_answer">{% trans 'answer' %}</label></div>
+								<div class="form_input"><input type="text" id="id_answer" name="answer" /></div>
+								<div class="dummy">&nbsp;</div>
+								{% endif %}
+								<input type="submit" class="form_button" value="{% trans 'Comment' %}" />
+								<div class="dummy">&nbsp;</div>
+							</fieldset>
+						</form>
+					</div>
+  {% endblock %}
+{% endblock %}

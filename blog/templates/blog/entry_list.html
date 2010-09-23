@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n blogfilter %}
+
+{% block content %}
+  {% for object in object_list %}
+    {% include 'blog/rdf.html' %}
+					<h2>{{ object.title }}</h2>
+					<div class="meta">
+						<span class="date">{{ object.create_date|date:"F d, Y  H:i"}}</span>
+						<span class="postedBy">Posted by <a href="#">{{ object.author }}</a></span>
+					</div>
+					<div style="clear: both;"> </div>
+					<p>{{ object.body|truncatelines:3 }}</p>
+					<div class="meta">{% if object.has_3lines %}<a href="{{ object.absolute_url }}">read more...</a>{% endif %}</div>
+					<div class="comments">
+						{{ object.trackback_count }} trackbacks | {{ object.comment_count }} comments | <a href="{{ object.absolute_url }}#comment">View or Leave comments</a>
+					</div>
+　　{% endfor %}
+{% endblock %}

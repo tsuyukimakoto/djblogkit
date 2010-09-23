@@ -1,0 +1,40 @@
+{% extends 'blog/entry_detail.html' %}
+{% load i18n %}
+
+  {% block comment_form %}
+					<div id="comment_form">
+						<form action="."　method="POST">
+							<fieldset>
+								<legend>{% trans 'add comment' %}</legend><br />
+								{% if form.has_errors %}
+								<h4>{% trans 'Please correct the following error' %}{{ form.error_dict|pluralize }}:</h4>
+								{% endif %}
+								<div class="form_label">
+									<label for="id_author">{% trans 'Commentator' %}{% if form.author.errors %}<br /><span class="error">{{ form.author.errors|join:", " }}</span>{% endif %}</label>
+								</div>
+								<div class="form_input">{{ form.author }}</div>
+								<div class="dummy">&nbsp;</div>
+								<div class="form_label">
+									<label for="id_url">{% trans 'URL' %}{% if form.url.errors %}<br /><span class="error">{{ form.url.errors|join:", " }}</span>{% endif %}</label>
+								</div>
+								<div class="form_input">{{ form.url }}</div>
+								<div class="dummy">&nbsp;</div>
+								<div class="form_label">
+									<label for="id_body">{% trans 'body' %}{% if form.body.errors %}<br /><span class="error">{{ form.body.errors|join:", " }}</span>{% endif %}</label>
+								</div>
+								<div class="form_input">{{ form.body }}</div>
+								<div class="dummy">&nbsp;</div>
+								{% if object.riddle %}
+								<h4>{{ object.riddle }}</h4>
+								<div class="form_label">
+									<label for="id_answer">{% trans 'answer' %}{% if form.answer.errors %}<br /><span class="error">{{ form.answer.errors|join:", " }}</span>{% endif %}</label>
+								</div>
+								<div class="form_input">{{ form.answer }}</div>
+								<div class="dummy">&nbsp;</div>
+								{% endif %}
+								<input type="submit" class="form_button" value="{% trans 'Comment' %}" />
+								<div class="dummy">&nbsp;</div>
+							</fieldset>
+						</form>
+					</div>
+  {% endblock %}

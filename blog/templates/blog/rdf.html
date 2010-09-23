@@ -1,0 +1,15 @@
+{% load blogfilter %}
+<!--
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdf:Description
+    rdf:about="http://www.everes.net"
+    trackback:ping="http://www.everes.net{{ object.get_absolute_url }}tbping"
+    dc:title="{{ object.title }}"
+    dc:identifier="http://www.everes.net{{ object.get_absolute_url }}"
+    dc:description="{{ object.body|escape|truncatelines:5|to_oneline }}"
+    dc:creator="{{ object.author }}"
+    dc:date="{{ object.create_date|date:"Y-m-d" }}T{{ object.create_date|time:"H:i:s" }}+09:00" />
+</rdf:RDF>
+-->
